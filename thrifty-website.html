@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>THRIFTY — Dress Different. Be Legendary.</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Righteous&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --black:    #050508;
+  --card:     #0c0c14;
+  --border:   #1c1c2e;
+  --mag:      #FF006E;
+  --green:    #39FF14;
+  --yellow:   #FFE500;
+  --cyan:     #00D4FF;
+  --orange:   #FF5C00;
+  --purple:   #8B2FC9;
+  --white:    #FFF5F0;
+  --muted:    #6a6a88;
+  --text:     #e0e0f0;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--black);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden;cursor:none;}
+
+/* ── CURSOR ── */
+#cur{width:10px;height:10px;background:var(--green);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transition:transform .08s;mix-blend-mode:exclusion;}
+#cur-ring{width:40px;height:40px;border:1.5px solid var(--mag);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transition:left .12s ease,top .12s ease;mix-blend-mode:exclusion;}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-thumb{background:var(--mag);}
+
+/* ── GRAIN OVERLAY ── */
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:.5;}
+
+/* ── NAVBAR ── */
+nav{position:fixed;top:0;width:100%;z-index:500;padding:0 6%;height:68px;display:flex;align-items:center;justify-content:space-between;transition:all .3s;}
+nav.scrolled{background:rgba(5,5,8,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;letter-spacing:5px;color:var(--white);position:relative;}
+.nav-logo::after{content:'™';font-size:.5rem;position:absolute;top:4px;right:-14px;color:var(--green);}
+.nav-links{display:flex;gap:2.5rem;list-style:none;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.78rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:color .2s;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;background:var(--green);transition:width .3s;}
+.nav-links a:hover{color:var(--white);}
+.nav-links a:hover::after{width:100%;}
+.nav-cta{background:var(--mag);color:#fff;border:none;padding:.5rem 1.4rem;border-radius:4px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.8rem;cursor:none;letter-spacing:1px;text-transform:uppercase;transition:all .2s;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,0 100%);}
+.nav-cta:hover{background:var(--green);color:#000;}
+
+/* ── HERO ── */
+#hero{min-height:100vh;display:grid;place-items:center;position:relative;overflow:hidden;padding-top:68px;}
+.hero-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,0,110,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,0,110,.07) 1px,transparent 1px);background-size:60px 60px;animation:gridShift 20s linear infinite;}
+@keyframes gridShift{from{background-position:0 0;}to{background-position:60px 60px;}}
+.hero-vignette{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 30%,var(--black) 80%);}
+
+/* Floating stickers */
+.sticker{position:absolute;font-size:2.5rem;animation:float 6s ease-in-out infinite;user-select:none;pointer-events:none;}
+.s1{top:15%;left:8%;animation-delay:0s;transform:rotate(-15deg);}
+.s2{top:20%;right:10%;font-size:3rem;animation-delay:1s;transform:rotate(10deg);}
+.s3{bottom:25%;left:6%;font-size:2rem;animation-delay:2s;transform:rotate(5deg);}
+.s4{bottom:20%;right:8%;font-size:3.5rem;animation-delay:0.5s;transform:rotate(-8deg);}
+.s5{top:50%;left:3%;font-size:1.8rem;animation-delay:3s;}
+.s6{top:40%;right:4%;font-size:2rem;animation-delay:1.5s;transform:rotate(20deg);}
+@keyframes float{0%,100%{transform:translateY(0) rotate(var(--r,0deg));}50%{transform:translateY(-18px) rotate(var(--r,0deg));}}
+
+.hero-inner{position:relative;z-index:2;text-align:center;padding:0 4%;}
+.hero-pill{display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,229,0,.08);border:1px solid rgba(255,229,0,.25);color:var(--yellow);padding:.38rem 1.1rem;border-radius:2px;font-size:.7rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:2rem;animation:fadeUp .7s ease both;}
+.hero-pill .live-dot{width:7px;height:7px;background:var(--yellow);border-radius:50%;animation:pulse 1.4s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.7);}}
+
+.hero-h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(5rem,18vw,14rem);line-height:.88;letter-spacing:1px;position:relative;animation:fadeUp .7s .1s ease both;}
+.hero-h1 .word1{display:block;color:var(--white);}
+.hero-h1 .word2{display:block;-webkit-text-stroke:2px var(--mag);color:transparent;position:relative;}
+.hero-h1 .word2::before{content:'DIFFERENT.';position:absolute;inset:0;color:var(--mag);clip-path:polygon(0 0,0 0,0 100%,0 100%);animation:glitchReveal 1.2s .6s forwards;}
+@keyframes glitchReveal{0%{clip-path:polygon(0 0,0 0,0 100%,0 100%);}20%{clip-path:polygon(0 0,35% 0,35% 100%,0 100%);}40%{clip-path:polygon(0 0,60% 0,60% 100%,0 100%);transform:translateX(3px);}60%{clip-path:polygon(0 0,85% 0,85% 100%,0 100%);transform:translateX(-2px);}80%{clip-path:polygon(0 0,95% 0,95% 100%,0 100%);transform:translateX(1px);}100%{clip-path:polygon(0 0,100% 0,100% 100%,0 100%);transform:translateX(0);}}
+
+.hero-tagline{font-family:'Instrument Serif',serif;font-style:italic;font-size:clamp(1rem,2.5vw,1.6rem);color:var(--muted);max-width:560px;margin:1.5rem auto;line-height:1.6;animation:fadeUp .7s .25s ease both;}
+.hero-tagline em{color:var(--green);font-style:normal;}
+
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:2.5rem;animation:fadeUp .7s .4s ease both;}
+.btn-mag{background:var(--mag);color:#fff;border:none;padding:.9rem 2.5rem;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.95rem;cursor:none;transition:all .25s;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%);letter-spacing:.5px;}
+.btn-mag:hover{background:var(--green);color:#000;transform:translateY(-3px);box-shadow:0 14px 40px rgba(57,255,20,.25);}
+.btn-ghost{background:transparent;color:var(--white);border:1px solid rgba(255,255,255,.2);padding:.9rem 2.5rem;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.95rem;cursor:none;transition:all .25s;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%);}
+.btn-ghost:hover{border-color:var(--cyan);color:var(--cyan);}
+
+.hero-stats{display:flex;gap:3rem;justify-content:center;margin-top:4rem;animation:fadeUp .7s .55s ease both;flex-wrap:wrap;}
+.h-stat{text-align:center;}
+.h-stat-num{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:2px;line-height:1;}
+.h-stat-num span{font-size:1.5rem;color:var(--green);}
+.h-stat-label{font-size:.72rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:.2rem;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── TICKER ── */
+.ticker{overflow:hidden;background:var(--mag);padding:.55rem 0;position:relative;z-index:2;}
+.ticker-track{display:flex;gap:2.5rem;white-space:nowrap;animation:ticker 25s linear infinite;}
+.ticker-track span{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:3px;color:#fff;display:flex;align-items:center;gap:.7rem;}
+.ticker-track span::after{content:'✦';font-size:.65rem;opacity:.7;}
+@keyframes ticker{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* ── SECTIONS ── */
+.section{padding:7rem 6%;position:relative;}
+.label{font-size:.68rem;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--mag);margin-bottom:.8rem;display:flex;align-items:center;gap:.6rem;}
+.label::before{content:'';width:24px;height:1px;background:var(--mag);}
+.section-h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,7vw,5.5rem);line-height:.95;letter-spacing:1px;}
+.section-sub{color:var(--muted);font-size:1rem;line-height:1.8;max-width:500px;margin-top:.75rem;}
+
+/* ── ABOUT STRIP ── */
+#about{background:linear-gradient(135deg,#0a000f,#050508);}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;margin-top:4rem;}
+.about-visual{position:relative;}
+.about-big-text{font-family:'Bebas Neue',sans-serif;font-size:clamp(5rem,12vw,9rem);line-height:.9;-webkit-text-stroke:1px rgba(255,0,110,.3);color:transparent;position:relative;}
+.about-big-text .filled{color:var(--mag);-webkit-text-stroke:0;}
+.about-accent-box{position:absolute;bottom:-20px;right:-20px;background:var(--green);color:#000;padding:1.25rem 1.75rem;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);}
+.about-points{display:flex;flex-direction:column;gap:1.5rem;margin-top:2rem;}
+.about-point{display:flex;gap:1.25rem;align-items:flex-start;}
+.apt-icon{width:42px;height:42px;background:rgba(255,0,110,.1);border:1px solid rgba(255,0,110,.2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+.apt-title{font-weight:700;font-size:.95rem;margin-bottom:.3rem;color:var(--white);}
+.apt-text{font-size:.85rem;color:var(--muted);line-height:1.7;}
+
+/* ── COLLECTIONS ── */
+#collections{overflow:hidden;}
+.collections-header{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1.5rem;margin-bottom:3rem;}
+.coll-grid{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:auto auto;gap:1.2rem;}
+.coll-card{position:relative;border-radius:4px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;cursor:none;transition:transform .4s;}
+.coll-card:hover{transform:scale(1.02);}
+.coll-card.big{grid-row:1/3;}
+.coll-inner{height:100%;min-height:260px;display:flex;flex-direction:column;justify-content:flex-end;padding:1.75rem;position:relative;overflow:hidden;}
+.coll-card.big .coll-inner{min-height:520px;}
+.coll-bg{position:absolute;inset:0;transition:transform .5s;}
+.coll-card:hover .coll-bg{transform:scale(1.06);}
+.coll-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.85) 0%,rgba(0,0,0,.1) 60%);}
+.coll-tag{background:var(--mag);color:#fff;font-size:.62rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:.3rem .7rem;border-radius:2px;width:fit-content;margin-bottom:.75rem;}
+.coll-name{font-family:'Bebas Neue',sans-serif;font-size:2rem;line-height:1;letter-spacing:1px;color:var(--white);margin-bottom:.4rem;}
+.coll-card.big .coll-name{font-size:3rem;}
+.coll-meta{font-size:.75rem;color:rgba(255,255,255,.55);display:flex;align-items:center;gap:.75rem;}
+.coll-arrow{width:36px;height:36px;background:rgba(255,255,255,.1);backdrop-filter:blur(8px);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-left:auto;transition:all .25s;flex-shrink:0;}
+.coll-card:hover .coll-arrow{background:var(--green);color:#000;}
+
+/* ── HOW IT WORKS ── */
+#how{background:#080810;}
+.steps-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0;margin-top:4rem;position:relative;}
+.steps-row::before{content:'';position:absolute;top:40px;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--border),var(--mag),var(--border),transparent);}
+.step{text-align:center;padding:0 1.5rem;position:relative;}
+.step-num{width:80px;height:80px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--muted);position:relative;background:var(--black);transition:all .4s;}
+.step:hover .step-num{border-color:var(--mag);color:var(--white);box-shadow:0 0 30px rgba(255,0,110,.3);}
+.step-icon{font-size:1.8rem;position:absolute;}
+.step-title{font-family:'Righteous',sans-serif;font-size:1.05rem;margin-bottom:.5rem;color:var(--white);}
+.step-desc{font-size:.82rem;color:var(--muted);line-height:1.7;}
+
+/* ── FEATURED DROPS ── */
+#drops .drops-scroll{display:flex;gap:1.25rem;overflow-x:auto;padding-bottom:1rem;scrollbar-width:none;margin-top:3rem;}
+#drops .drops-scroll::-webkit-scrollbar{display:none;}
+.drop-card{min-width:260px;background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;flex-shrink:0;cursor:none;transition:all .3s;}
+.drop-card:hover{border-color:rgba(255,0,110,.4);transform:translateY(-4px);}
+.drop-img{height:280px;display:flex;align-items:center;justify-content:center;font-size:5rem;position:relative;}
+.drop-info{padding:1.1rem;}
+.drop-cat{font-size:.65rem;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:var(--mag);margin-bottom:.3rem;}
+.drop-name{font-family:'Righteous',sans-serif;font-size:1rem;margin-bottom:.5rem;color:var(--white);}
+.drop-price-row{display:flex;align-items:center;justify-content:space-between;}
+.drop-price{font-size:1.05rem;font-weight:700;color:var(--green);}
+.drop-og{font-size:.8rem;color:var(--muted);text-decoration:line-through;margin-left:.4rem;}
+.drop-btn{background:var(--mag);border:none;color:#fff;font-size:.78rem;font-weight:700;padding:.45rem 1rem;border-radius:3px;cursor:none;transition:all .2s;}
+.drop-btn:hover{background:var(--green);color:#000;}
+
+/* ── BRAND VALUES ── */
+#values{background:var(--black);overflow:hidden;}
+.values-marquee-wrap{margin-top:4rem;overflow:hidden;}
+.values-marquee{display:flex;gap:1.5rem;animation:marqueeLeft 30s linear infinite;width:max-content;}
+.val-pill{display:flex;align-items:center;gap:.75rem;background:var(--card);border:1px solid var(--border);padding:1.1rem 1.75rem;border-radius:100px;white-space:nowrap;transition:all .3s;cursor:none;}
+.val-pill:hover{border-color:var(--mag);background:rgba(255,0,110,.08);}
+.val-pill span:first-child{font-size:1.4rem;}
+.val-pill span:last-child{font-weight:700;font-size:.9rem;}
+@keyframes marqueeLeft{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+.values-marquee-wrap.rev .values-marquee{animation-direction:reverse;}
+
+.values-big-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:2rem;}
+.val-block{padding:2.5rem;border:1px solid var(--border);border-radius:4px;transition:all .35s;position:relative;overflow:hidden;cursor:none;}
+.val-block::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .35s;}
+.val-block:hover::before{opacity:1;}
+.v1::before{background:radial-gradient(ellipse at 0 0,rgba(255,0,110,.12),transparent 60%);}
+.v2::before{background:radial-gradient(ellipse at 0 0,rgba(57,255,20,.1),transparent 60%);}
+.v3::before{background:radial-gradient(ellipse at 0 0,rgba(0,212,255,.1),transparent 60%);}
+.val-block:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.1);}
+.val-block-icon{font-size:2.5rem;margin-bottom:1.25rem;}
+.val-block-num{font-family:'Bebas Neue',sans-serif;font-size:4rem;line-height:1;opacity:.08;position:absolute;top:1rem;right:1.5rem;}
+.val-block-title{font-family:'Righteous',sans-serif;font-size:1.25rem;margin-bottom:.6rem;color:var(--white);}
+.val-block-text{font-size:.85rem;color:var(--muted);line-height:1.8;}
+
+/* ── TESTIMONIALS ── */
+#testimonials{background:#08080f;}
+.testi-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-top:3.5rem;}
+.testi-card{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:1.75rem;transition:all .3s;position:relative;overflow:hidden;}
+.testi-card::after{content:'"';position:absolute;bottom:-10px;right:20px;font-family:'Bebas Neue',sans-serif;font-size:8rem;color:rgba(255,0,110,.06);line-height:1;}
+.testi-card:hover{border-color:rgba(255,0,110,.25);transform:translateY(-3px);}
+.testi-card.featured{grid-column:1/-1;background:linear-gradient(135deg,rgba(255,0,110,.08),rgba(139,47,201,.08));border-color:rgba(255,0,110,.2);}
+.testi-top{display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem;}
+.testi-avatar{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;border:2px solid var(--border);}
+.testi-name{font-weight:700;font-size:.92rem;color:var(--white);}
+.testi-handle{font-size:.73rem;color:var(--muted);}
+.testi-stars{color:var(--yellow);font-size:.75rem;margin-bottom:.3rem;}
+.testi-text{font-size:.88rem;line-height:1.8;color:var(--text);}
+.testi-card.featured .testi-text{font-size:1rem;}
+.verified{display:inline-flex;align-items:center;gap:.3rem;background:rgba(57,255,20,.1);color:var(--green);font-size:.62rem;font-weight:700;letter-spacing:1px;padding:.25rem .6rem;border-radius:2px;margin-left:.5rem;}
+
+/* ── CTA STRIP ── */
+#cta{background:linear-gradient(135deg,#1a0018,#050508,#00100a);padding:8rem 6%;text-align:center;position:relative;overflow:hidden;}
+#cta::before{content:'THRIFTY';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Bebas Neue',sans-serif;font-size:clamp(8rem,25vw,20rem);color:rgba(255,255,255,.02);letter-spacing:10px;white-space:nowrap;pointer-events:none;}
+.cta-h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,12vw,9rem);line-height:.92;position:relative;z-index:1;}
+.cta-h2 .c1{color:var(--white);}
+.cta-h2 .c2{color:var(--mag);}
+.cta-h2 .c3{color:var(--green);}
+.cta-sub{font-family:'Instrument Serif',serif;font-style:italic;font-size:1.3rem;color:var(--muted);margin:1.25rem 0 2.5rem;position:relative;z-index:1;}
+.cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;position:relative;z-index:1;}
+
+/* ── FOOTER ── */
+footer{background:#030305;border-top:1px solid var(--border);padding:4rem 6% 2rem;}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:4rem;padding-bottom:3rem;border-bottom:1px solid var(--border);}
+.footer-brand .logo{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:5px;color:var(--white);margin-bottom:1rem;display:block;}
+.footer-brand p{font-size:.83rem;color:var(--muted);line-height:1.8;max-width:280px;}
+.footer-col h4{font-size:.7rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--white);margin-bottom:1.25rem;}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:.7rem;}
+.footer-col li a{font-size:.83rem;color:var(--muted);text-decoration:none;transition:color .2s;}
+.footer-col li a:hover{color:var(--mag);}
+.footer-social{display:flex;gap:.75rem;margin-top:1.5rem;}
+.social-btn{width:38px;height:38px;background:var(--card);border:1px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:1rem;cursor:none;transition:all .2s;}
+.social-btn:hover{border-color:var(--mag);background:rgba(255,0,110,.1);}
+.footer-bottom{padding-top:2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.footer-copy{font-size:.75rem;color:var(--muted);}
+.footer-dev{font-size:.75rem;color:var(--muted);}
+.footer-dev strong{color:var(--mag);}
+.footer-badge{background:rgba(57,255,20,.08);border:1px solid rgba(57,255,20,.2);color:var(--green);font-size:.65rem;font-weight:700;letter-spacing:1.5px;padding:.3rem .8rem;border-radius:2px;}
+
+/* ── ANNOUNCE BAR ── */
+.announce{background:var(--yellow);padding:.45rem 0;text-align:center;font-size:.72rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#000;}
+.announce span{margin:0 1.5rem;}
+
+/* ── SCROLL REVEAL ── */
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.in{opacity:1;transform:translateY(0);}
+
+/* ── MOBILE ── */
+@media(max-width:900px){
+  .nav-links{display:none;}
+  .about-grid{grid-template-columns:1fr;}
+  .coll-grid{grid-template-columns:1fr 1fr;} .coll-card.big{grid-row:auto;}
+  .testi-grid{grid-template-columns:1fr;} .testi-card.featured{grid-column:auto;}
+  .footer-top{grid-template-columns:1fr 1fr;}
+  .values-big-grid{grid-template-columns:1fr;}
+  .steps-row::before{display:none;}
+}
+@media(max-width:600px){
+  .coll-grid{grid-template-columns:1fr;}
+  .footer-top{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<!-- ANNOUNCE BAR -->
+<div class="announce">
+  <span>🎉 New Drop: Summer Haze Collection</span>
+  <span>|</span>
+  <span>FREE Delivery above ₹999</span>
+  <span>|</span>
+  <span>Use Code GENZ50 for 50% off</span>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">THRIFTY</div>
+  <ul class="nav-links">
+    <li><a href="#collections">Collections</a></li>
+    <li><a href="#drops">Drops</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#values">Values</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">Shop Now →</button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-vignette"></div>
+
+  <!-- Floating stickers -->
+  <div class="sticker s1" style="--r:-15deg">♻️</div>
+  <div class="sticker s2" style="--r:10deg">🔥</div>
+  <div class="sticker s3" style="--r:5deg">⚡</div>
+  <div class="sticker s4" style="--r:-8deg">🌀</div>
+  <div class="sticker s5" style="--r:0deg">✨</div>
+  <div class="sticker s6" style="--r:20deg">💜</div>
+
+  <div class="hero-inner">
+    <div class="hero-pill"><span class="live-dot"></span> Summer 2025 Drop — Live Now</div>
+
+    <h1 class="hero-h1">
+      <span class="word1">DRESS</span>
+      <span class="word2">DIFFERENT.</span>
+    </h1>
+
+    <p class="hero-tagline">
+      The thrift brand built for <em>real ones</em>. Curated fits, unapologetic style,<br>and prices that won't break your broke era.
+    </p>
+
+    <div class="hero-btns">
+      <button class="btn-mag" onclick="document.getElementById('collections').scrollIntoView({behavior:'smooth'})">Explore Collections 🛍️</button>
+      <button class="btn-ghost" onclick="document.getElementById('drops').scrollIntoView({behavior:'smooth'})">See Latest Drops ↓</button>
+    </div>
+
+    <div class="hero-stats">
+      <div class="h-stat">
+        <div class="h-stat-num" id="statOrders">0<span>K+</span></div>
+        <div class="h-stat-label">Orders Shipped</div>
+      </div>
+      <div class="h-stat">
+        <div class="h-stat-num" id="statCustomers">0<span>K+</span></div>
+        <div class="h-stat-label">Happy Customers</div>
+      </div>
+      <div class="h-stat">
+        <div class="h-stat-num" id="statItems">0<span>+</span></div>
+        <div class="h-stat-label">Unique Pieces</div>
+      </div>
+      <div class="h-stat">
+        <div class="h-stat-num"><span style="font-size:2.5rem;color:var(--yellow)">★</span> 4.9</div>
+        <div class="h-stat-label">Average Rating</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track" id="tickerTrack">
+    <span>Free Shipping Over ₹999</span><span>New Drop Every Friday</span><span>Sustainable Only</span><span>Gen-Z Approved</span><span>Thrift It Forward</span><span>Free Returns 30 Days</span><span>Limited Drops</span><span>Carbon Neutral Shipping</span>
+    <span>Free Shipping Over ₹999</span><span>New Drop Every Friday</span><span>Sustainable Only</span><span>Gen-Z Approved</span><span>Thrift It Forward</span><span>Free Returns 30 Days</span><span>Limited Drops</span><span>Carbon Neutral Shipping</span>
+  </div>
+</div>
+
+<!-- COLLECTIONS -->
+<section id="collections" class="section">
+  <div class="collections-header reveal">
+    <div>
+      <div class="label">Curated For You</div>
+      <h2 class="section-h2">Shop by<br><span style="color:var(--mag)">Collection</span></h2>
+    </div>
+    <p class="section-sub">Each drop is a limited run. Once it's gone — it's <em style="color:var(--yellow)">gone</em>. No restocks, no excuses.</p>
+  </div>
+
+  <div class="coll-grid reveal">
+    <!-- Big card -->
+    <div class="coll-card big">
+      <div class="coll-inner">
+        <div class="coll-bg" style="background:linear-gradient(135deg,#1a0030 0%,#3d0060 40%,#660080 100%);">
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10rem;opacity:.35">👖</div>
+        </div>
+        <div class="coll-overlay"></div>
+        <div style="position:relative;z-index:1;">
+          <div class="coll-tag">🔥 Best Seller</div>
+          <div class="coll-name">NIGHT SHIFT<br>BOTTOMS</div>
+          <div class="coll-meta">
+            <span>48 pieces</span>
+            <span>·</span>
+            <span>From ₹699</span>
+            <div class="coll-arrow">→</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Small cards -->
+    <div class="coll-card">
+      <div class="coll-inner">
+        <div class="coll-bg" style="background:linear-gradient(135deg,#002030,#004060);"></div>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:6rem;opacity:.45">🧥</div>
+        <div class="coll-overlay"></div>
+        <div style="position:relative;z-index:1;">
+          <div class="coll-tag">✨ New</div>
+          <div class="coll-name">LAYERED UP</div>
+          <div class="coll-meta"><span>32 pieces</span><span>·</span><span>From ₹1,199</span><div class="coll-arrow">→</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="coll-card">
+      <div class="coll-inner">
+        <div class="coll-bg" style="background:linear-gradient(135deg,#200a00,#501500);"></div>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:6rem;opacity:.45">👟</div>
+        <div class="coll-overlay"></div>
+        <div style="position:relative;z-index:1;">
+          <div class="coll-tag" style="background:var(--orange);">🏷️ Sale</div>
+          <div class="coll-name">SOLE MATES</div>
+          <div class="coll-meta"><span>21 pairs</span><span>·</span><span>From ₹1,799</span><div class="coll-arrow">→</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="coll-card">
+      <div class="coll-inner">
+        <div class="coll-bg" style="background:linear-gradient(135deg,#001020,#003040);"></div>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:6rem;opacity:.45">🎸</div>
+        <div class="coll-overlay"></div>
+        <div style="position:relative;z-index:1;">
+          <div class="coll-tag" style="background:var(--cyan);color:#000;">💧 Fresh</div>
+          <div class="coll-name">GRAPHIC TEES</div>
+          <div class="coll-meta"><span>60 pieces</span><span>·</span><span>From ₹449</span><div class="coll-arrow">→</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="coll-card">
+      <div class="coll-inner">
+        <div class="coll-bg" style="background:linear-gradient(135deg,#0a1500,#1a3000);"></div>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:6rem;opacity:.45">📿</div>
+        <div class="coll-overlay"></div>
+        <div style="position:relative;z-index:1;">
+          <div class="coll-tag" style="background:var(--green);color:#000;">🌿 Eco</div>
+          <div class="coll-name">ACCESSORIES</div>
+          <div class="coll-meta"><span>90 items</span><span>·</span><span>From ₹249</span><div class="coll-arrow">→</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" class="section">
+  <div class="reveal" style="text-align:center;max-width:700px;margin:0 auto;">
+    <div class="label" style="justify-content:center;">The Process</div>
+    <h2 class="section-h2">How <span style="color:var(--green)">Thrifty</span> Works</h2>
+    <p class="section-sub" style="margin:0 auto;">From discovery to doorstep — it's stupidly easy.</p>
+  </div>
+
+  <div class="steps-row reveal">
+    <div class="step">
+      <div class="step-num"><span class="step-icon">🔍</span></div>
+      <div class="step-title">Browse Drops</div>
+      <div class="step-desc">Explore curated collections updated every Friday. Filter by vibe, size, or price.</div>
+    </div>
+    <div class="step">
+      <div class="step-num"><span class="step-icon">❤️</span></div>
+      <div class="step-title">Build Your Look</div>
+      <div class="step-desc">Save to wishlist, mix & match, and curate your own aesthetic from 500+ unique pieces.</div>
+    </div>
+    <div class="step">
+      <div class="step-num"><span class="step-icon">🛒</span></div>
+      <div class="step-title">Add to Cart</div>
+      <div class="step-desc">Secure checkout with UPI, card, net banking or cash on delivery. Use GENZ50 for 50% off.</div>
+    </div>
+    <div class="step">
+      <div class="step-num"><span class="step-icon">📦</span></div>
+      <div class="step-title">Get Delivered</div>
+      <div class="step-desc">Same-day dispatch on orders before 2PM. Track your order in real time. No cap.</div>
+    </div>
+    <div class="step">
+      <div class="step-num"><span class="step-icon">🔥</span></div>
+      <div class="step-title">Slay & Repeat</div>
+      <div class="step-desc">Wear it, flex it, repeat. Easy 30-day returns if something's off. We've got you.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED DROPS -->
+<section id="drops" class="section">
+  <div class="reveal" style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1.5rem;">
+    <div>
+      <div class="label">This Week's Fire 🔥</div>
+      <h2 class="section-h2">Latest <span style="color:var(--mag)">Drops</span></h2>
+    </div>
+    <div style="display:flex;align-items:center;gap:.5rem;color:var(--muted);font-size:.82rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;">
+      <span style="width:8px;height:8px;background:var(--mag);border-radius:50%;animation:pulse 1.2s infinite;"></span>
+      Restocking in <span id="countdown" style="color:var(--yellow);margin-left:.3rem;">--:--:--</span>
+    </div>
+  </div>
+
+  <div class="drops-scroll reveal">
+    <!-- Drop cards -->
+    <div class="drop-card">
+      <div class="drop-img" style="background:linear-gradient(135deg,#200030,#500070);">🦋</div>
+      <div class="drop-info">
+        <div class="drop-cat">Tops</div>
+        <div class="drop-name">Y2K Butterfly Crop Tee</div>
+        <div class="drop-price-row"><div class="drop-price">₹549 <span class="drop-og">₹899</span></div><button class="drop-btn">Add +</button></div>
+      </div>
+    </div>
+    <div class="drop-card">
+      <div class="drop-img" style="background:linear-gradient(135deg,#002020,#004040);">👖</div>
+      <div class="drop-info">
+        <div class="drop-cat">Bottoms</div>
+        <div class="drop-name">Wide Leg Cargo Pants</div>
+        <div class="drop-price-row"><div class="drop-price">₹1,199 <span class="drop-og">₹1,899</span></div><button class="drop-btn">Add +</button></div>
+      </div>
+    </div>
+    <div class="drop-card">
+      <div class="drop-img" style="background:linear-gradient(135deg,#200010,#500030);">🧥</div>
+      <div class="drop-info">
+        <div class="drop-cat">Outerwear</div>
+        <div class="drop-name">Acid Wash Oversized Hoodie</div>
+        <div class="drop-price-row"><div class="drop-price">₹1,499 <span class="drop-og">₹2,299</span></div><button class="drop-btn">Add +</button></div>
+      </div>
+    </div>
+    <div class="drop-card">
+      <div class="drop-img" style="background:linear-gradient(135deg,#001530,#003060);">👟</div>
+      <div class="drop-info">
+        <div class="drop-cat">Shoes</div>
+        <div class="drop-name">Chunky Platform Sneakers</div>
+        <div class="drop-price-row"><div class="drop-price">₹2,199 <span class="drop-og">₹3,499</span></div><button class="drop-btn">Add +</button></div>
+      </div>
+    </div>
+    <div class="drop-card">
+      <div class="drop-img" style="background:linear-gradient(135deg,#102000,#204000);">🧤</div>
+      <div class="drop-info">
+        <div class="drop-cat">Outerwear</div>
+        <div class="drop-name">Patchwork Denim Jacket</div>
+        <div class="drop-price-row"><div class="drop-price">₹1,799 <span class="drop-og">₹2,799</span></div><button class="drop-btn">Add +</button></div>
+      </div>
+    </div>
+    <div class="drop-card">
+      <div class="drop-img" style="background:linear-gradient(135deg,#200020,#400040);">🌀</div>
+      <div class="drop-info">
+        <div class="drop-cat">Bottoms</div>
+        <div class="drop-name">Neon Tie-Dye Mini Skirt</div>
+        <div class="drop-price-row"><div class="drop-price">₹699 <span class="drop-og">₹999</span></div><button class="drop-btn">Add +</button></div>
+      </div>
+    </div>
+    <div class="drop-card">
+      <div class="drop-img" style="background:linear-gradient(135deg,#1a1000,#3a2000);">📿</div>
+      <div class="drop-info">
+        <div class="drop-cat">Accessories</div>
+        <div class="drop-name">Retro Chain Necklace Set</div>
+        <div class="drop-price-row"><div class="drop-price">₹349 <span class="drop-og">₹599</span></div><button class="drop-btn">Add +</button></div>
+      </div>
+    </div>
+    <div class="drop-card">
+      <div class="drop-img" style="background:linear-gradient(135deg,#0a0a30,#1a1a60);">🎸</div>
+      <div class="drop-info">
+        <div class="drop-cat">Tops</div>
+        <div class="drop-name">Graphic Band Oversized Tee</div>
+        <div class="drop-price-row"><div class="drop-price">₹499 <span class="drop-og">₹799</span></div><button class="drop-btn">Add +</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="section">
+  <div class="about-grid reveal">
+    <div class="about-visual">
+      <div class="about-big-text">
+        THRIFT<br>
+        <span class="filled">HARD.</span><br>
+        SLAY<br>
+        <span class="filled">HARDER.</span>
+      </div>
+      <div class="about-accent-box">SINCE 2023 ✦ BENGALURU</div>
+    </div>
+    <div>
+      <div class="label">Our Story</div>
+      <h2 class="section-h2">Built by <span style="color:var(--mag)">Gen-Z</span><br>for Gen-Z</h2>
+      <p style="color:var(--muted);font-size:.95rem;line-height:1.9;margin-top:1rem;">We started Thrifty because fashion was broken. Overpriced basics, unsustainable fast-fashion, and zero personality. We said <em style="color:var(--white)">enough</em>.</p>
+      <div class="about-points">
+        <div class="about-point">
+          <div class="apt-icon">♻️</div>
+          <div>
+            <div class="apt-title">Sustainability First</div>
+            <div class="apt-text">Every piece is ethically sourced, pre-loved, or crafted from recycled materials. Your drip, planet's gain.</div>
+          </div>
+        </div>
+        <div class="about-point">
+          <div class="apt-icon">💎</div>
+          <div>
+            <div class="apt-title">Premium Quality, Thrift Prices</div>
+            <div class="apt-text">We cut out the middlemen. Direct from curators to your closet — premium quality at prices that make sense.</div>
+          </div>
+        </div>
+        <div class="about-point">
+          <div class="apt-icon">🎨</div>
+          <div>
+            <div class="apt-title">Unapologetically Expressive</div>
+            <div class="apt-text">Fashion is identity. We curate pieces that let you tell your story without saying a word.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUES MARQUEE -->
+<section id="values" class="section" style="padding-bottom:3rem;">
+  <div class="reveal" style="text-align:center;max-width:700px;margin:0 auto 0;">
+    <div class="label" style="justify-content:center;">What We Stand For</div>
+    <h2 class="section-h2">Brand <span style="color:var(--green)">DNA</span></h2>
+  </div>
+
+  <div class="values-marquee-wrap reveal" style="margin-top:3rem;">
+    <div class="values-marquee">
+      <div class="val-pill"><span>♻️</span><span>Sustainable Fashion</span></div>
+      <div class="val-pill"><span>⚡</span><span>Same-Day Dispatch</span></div>
+      <div class="val-pill"><span>🔥</span><span>Limited Drops Only</span></div>
+      <div class="val-pill"><span>🌍</span><span>Carbon Neutral</span></div>
+      <div class="val-pill"><span>💜</span><span>Community First</span></div>
+      <div class="val-pill"><span>🎨</span><span>Self Expression</span></div>
+      <div class="val-pill"><span>🤑</span><span>Budget-Friendly</span></div>
+      <div class="val-pill"><span>✅</span><span>Quality Guaranteed</span></div>
+      <!-- duplicate for seamless scroll -->
+      <div class="val-pill"><span>♻️</span><span>Sustainable Fashion</span></div>
+      <div class="val-pill"><span>⚡</span><span>Same-Day Dispatch</span></div>
+      <div class="val-pill"><span>🔥</span><span>Limited Drops Only</span></div>
+      <div class="val-pill"><span>🌍</span><span>Carbon Neutral</span></div>
+      <div class="val-pill"><span>💜</span><span>Community First</span></div>
+      <div class="val-pill"><span>🎨</span><span>Self Expression</span></div>
+      <div class="val-pill"><span>🤑</span><span>Budget-Friendly</span></div>
+      <div class="val-pill"><span>✅</span><span>Quality Guaranteed</span></div>
+    </div>
+  </div>
+
+  <div class="values-big-grid reveal" style="margin-top:2rem;">
+    <div class="val-block v1">
+      <div class="val-block-num">01</div>
+      <div class="val-block-icon">🌱</div>
+      <div class="val-block-title">Earth-First Sourcing</div>
+      <div class="val-block-text">We partner with certified sustainable suppliers and upcycling studios. Every purchase plants a tree through our Green Stitch initiative.</div>
+    </div>
+    <div class="val-block v2">
+      <div class="val-block-num">02</div>
+      <div class="val-block-icon">🤝</div>
+      <div class="val-block-title">Community Over Clout</div>
+      <div class="val-block-text">Our community of 50K+ Gen-Z trendsetters votes on every new drop. If the vibe isn't there, it doesn't launch. Simple.</div>
+    </div>
+    <div class="val-block v3">
+      <div class="val-block-num">03</div>
+      <div class="val-block-icon">🎯</div>
+      <div class="val-block-title">Radical Transparency</div>
+      <div class="val-block-text">We show our cost breakdown on every product page. Know what you're paying for. No markups, no BS, just honest pricing.</div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials" class="section">
+  <div class="reveal" style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1.5rem;">
+    <div>
+      <div class="label">Real Talk</div>
+      <h2 class="section-h2">The <span style="color:var(--yellow)">Vibe Check</span> ✅</h2>
+    </div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:3rem;color:rgba(255,229,0,.15);">★★★★★</div>
+  </div>
+
+  <div class="testi-grid reveal">
+    <div class="testi-card featured">
+      <div class="testi-top">
+        <div class="testi-avatar" style="background:linear-gradient(135deg,var(--mag),var(--purple));">👑</div>
+        <div>
+          <div class="testi-name">Priya Sharma <span class="verified">✓ Verified</span></div>
+          <div class="testi-handle">@priya.drip · Bengaluru · Bought 12 items</div>
+        </div>
+      </div>
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">"i've bought from thrifty like 12 times now and it's literally the only brand i trust for actually unique fits. the quality is insane for the price range, delivery is fast as hell, and the packaging hits different. if you're still sleeping on thrifty your closet is suffering fr 💀"</div>
+    </div>
+
+    <div class="testi-card">
+      <div class="testi-top">
+        <div class="testi-avatar" style="background:linear-gradient(135deg,var(--cyan),var(--green));">👦</div>
+        <div><div class="testi-name">Arjun K.</div><div class="testi-handle">@arjunfits · Mumbai</div></div>
+      </div>
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">"bro the patchwork jacket is literally the most fire thing i've ever owned. everyone at college keeps asking where i got it 🔥"</div>
+    </div>
+
+    <div class="testi-card">
+      <div class="testi-top">
+        <div class="testi-avatar" style="background:linear-gradient(135deg,var(--yellow),var(--orange));">👩</div>
+        <div><div class="testi-name">Zara M.</div><div class="testi-handle">@zaraesthetic · Delhi</div></div>
+      </div>
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">"finally a brand that gets the thrift aesthetic without being cringe. the packaging was so cute, shipping was super fast, 10/10 ✨"</div>
+    </div>
+
+    <div class="testi-card">
+      <div class="testi-top">
+        <div class="testi-avatar" style="background:linear-gradient(135deg,#ff6b9d,#ff2d9b);">🎤</div>
+        <div><div class="testi-name">Karan V.</div><div class="testi-handle">@karanofficial · Pune</div></div>
+      </div>
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">"used code GENZ50 and got two hoodies for basically the price of one. this brand is literally robbing me of my serotonin in the best way 😭"</div>
+    </div>
+
+    <div class="testi-card">
+      <div class="testi-top">
+        <div class="testi-avatar" style="background:linear-gradient(135deg,#39FF14,#00D4FF);">🌿</div>
+        <div><div class="testi-name">Aisha R.</div><div class="testi-handle">@aisha.green · Hyderabad</div></div>
+      </div>
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">"love that they're actually sustainable unlike most brands that just say they are. quality check ✅ style check ✅ price check ✅"</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="reveal">
+    <div class="label" style="justify-content:center;">Ready to Thrift?</div>
+    <div class="cta-h2">
+      <div class="c1">STOP BEING</div>
+      <div class="c2">BASIC.</div>
+      <div class="c3">START THRIFTING.</div>
+    </div>
+    <p class="cta-sub">Your wardrobe called. It's having an identity crisis.</p>
+    <div class="cta-btns">
+      <button class="btn-mag" onclick="document.getElementById('collections').scrollIntoView({behavior:'smooth'})">Shop the Drop 🛍️</button>
+      <button class="btn-ghost">Join the Community 💜</button>
+    </div>
+    <div style="margin-top:3rem;display:flex;align-items:center;justify-content:center;gap:.75rem;flex-wrap:wrap;">
+      <div style="background:rgba(57,255,20,.08);border:1px solid rgba(57,255,20,.2);color:var(--green);padding:.5rem 1.2rem;border-radius:3px;font-size:.78rem;font-weight:700;letter-spacing:1.5px;">✓ FREE RETURNS</div>
+      <div style="background:rgba(255,0,110,.08);border:1px solid rgba(255,0,110,.2);color:var(--mag);padding:.5rem 1.2rem;border-radius:3px;font-size:.78rem;font-weight:700;letter-spacing:1.5px;">✓ SECURE CHECKOUT</div>
+      <div style="background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);color:var(--cyan);padding:.5rem 1.2rem;border-radius:3px;font-size:.78rem;font-weight:700;letter-spacing:1.5px;">✓ SAME-DAY DISPATCH</div>
+      <div style="background:rgba(255,229,0,.08);border:1px solid rgba(255,229,0,.2);color:var(--yellow);padding:.5rem 1.2rem;border-radius:3px;font-size:.78rem;font-weight:700;letter-spacing:1.5px;">✓ CARBON NEUTRAL</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <span class="logo">THRIFTY</span>
+      <p>The Gen-Z thrift brand redefining sustainable fashion from Bengaluru. Dress different. Think different. Be unapologetically you.</p>
+      <div class="footer-social">
+        <div class="social-btn">📸</div>
+        <div class="social-btn">🎵</div>
+        <div class="social-btn">🐦</div>
+        <div class="social-btn">📌</div>
+        <div class="social-btn">💬</div>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <ul>
+        <li><a href="#">New Arrivals</a></li>
+        <li><a href="#">Tops & Tees</a></li>
+        <li><a href="#">Bottoms</a></li>
+        <li><a href="#">Outerwear</a></li>
+        <li><a href="#">Shoes</a></li>
+        <li><a href="#">Accessories</a></li>
+        <li><a href="#">Sale 🏷️</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Sustainability</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Affiliates</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Shipping Info</a></li>
+        <li><a href="#">Returns</a></li>
+        <li><a href="#">Size Guide</a></li>
+        <li><a href="#">Track Order</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 Thrifty. All rights reserved. Made with 💜 in Bengaluru, India.</div>
+    <div class="footer-dev">Developed by <strong>Ayaan Ahmad Khan</strong></div>
+    <div class="footer-badge">Gen-Z Approved ✦ Since 2023</div>
+  </div>
+</footer>
+
+<!-- TOAST -->
+<div id="toast" style="position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green);color:#000;padding:.7rem 1.75rem;border-radius:3px;font-weight:700;font-size:.88rem;z-index:9000;transition:transform .35s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;pointer-events:none;"></div>
+
+<script>
+// ── Cursor ──
+const cur = document.getElementById('cur');
+const ring = document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx-5+'px';cur.style.top=my-5+'px';});
+function animRing(){rx+=(mx-rx-20)*.12;ry+=(my-ry-20)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
+animRing();
+document.addEventListener('mousedown',()=>{cur.style.transform='scale(2.5)';ring.style.transform='scale(.7)';});
+document.addEventListener('mouseup',()=>{cur.style.transform='scale(1)';ring.style.transform='scale(1)';});
+document.querySelectorAll('button,a,.coll-card,.drop-card,.val-pill,.val-block,.testi-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ring.style.width='60px';ring.style.height='60px';ring.style.borderColor='var(--green)';ring.style.marginTop='-10px';ring.style.marginLeft='-10px';});
+  el.addEventListener('mouseleave',()=>{ring.style.width='40px';ring.style.height='40px';ring.style.borderColor='var(--mag)';ring.style.marginTop='0';ring.style.marginLeft='0';});
+});
+
+// ── Navbar scroll ──
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>40);
+});
+
+// ── Scroll reveal ──
+const revealObserver=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');}});
+},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>revealObserver.observe(el));
+
+// ── Count-up animation ──
+function countUp(el,target,suffix,duration=2000){
+  let start=0;const step=target/(duration/16);
+  const t=setInterval(()=>{start+=step;if(start>=target){clearInterval(t);el.innerHTML=Math.round(target)+'<span>'+suffix+'</span>';}else{el.innerHTML=Math.round(start)+'<span>'+suffix+'</span>';}},16);
+}
+const statsObserver=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      countUp(document.getElementById('statOrders'),85,'K+');
+      countUp(document.getElementById('statCustomers'),50,'K+');
+      countUp(document.getElementById('statItems'),500,'+');
+      statsObserver.disconnect();
+    }
+  });
+},{threshold:.5});
+statsObserver.observe(document.getElementById('hero'));
+
+// ── Countdown timer ──
+function updateCountdown(){
+  const now=new Date();
+  const nextFri=new Date(now);
+  nextFri.setDate(now.getDate()+(5-now.getDay()+7)%7||7);
+  nextFri.setHours(10,0,0,0);
+  const diff=nextFri-now;
+  const h=String(Math.floor(diff/3600000)).padStart(2,'0');
+  const m=String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+  const s=String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+  const el=document.getElementById('countdown');
+  if(el) el.textContent=h+':'+m+':'+s;
+}
+setInterval(updateCountdown,1000);
+updateCountdown();
+
+// ── Drop buttons toast ──
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.style.transform='translateX(-50%) translateY(0)';
+  setTimeout(()=>t.style.transform='translateX(-50%) translateY(80px)',2600);
+}
+document.querySelectorAll('.drop-btn').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    const name=this.closest('.drop-card').querySelector('.drop-name').textContent;
+    this.textContent='✓ Added';
+    this.style.background='var(--green)';this.style.color='#000';
+    showToast('🛍️ '+name+' added!');
+    setTimeout(()=>{this.textContent='Add +';this.style.background='';this.style.color='';},2000);
+  });
+});
+
+// ── Parallax hero stickers ──
+document.addEventListener('mousemove',e=>{
+  const x=(e.clientX/window.innerWidth-.5)*20;
+  const y=(e.clientY/window.innerHeight-.5)*20;
+  document.querySelectorAll('.sticker').forEach((s,i)=>{
+    const depth=(i%3+1)*0.4;
+    s.style.transform=`translate(${x*depth}px,${y*depth}px) rotate(${s.style.getPropertyValue('--r')})`;
+  });
+});
+</script>
+</body>
+</html>
